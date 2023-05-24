@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">NewDemo</string>
+    <string name="audio_call">Audio Call</string>
+    <string name="video_call">Video Call</string>
+</resources>
