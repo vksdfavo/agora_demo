@@ -2,9 +2,12 @@ package com.example.newdemo;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
@@ -32,13 +35,32 @@ public class MainActivity extends AppCompatActivity {
     private List<ModalClass> list;
     private StepService service = null;
 
+    private static String[] PERMISSIONS_STORAGE = {
+            android.Manifest.permission.READ_EXTERNAL_STORAGE,
+            android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            android.Manifest.permission.ACCESS_FINE_LOCATION,
+            android.Manifest.permission.ACCESS_COARSE_LOCATION,
+            android.Manifest.permission.ACCESS_LOCATION_EXTRA_COMMANDS,
+            android.Manifest.permission.BLUETOOTH_SCAN,
+            android.Manifest.permission.BLUETOOTH_CONNECT,
+            android.Manifest.permission.BLUETOOTH_PRIVILEGED
+    };
+    private static String[] PERMISSIONS_LOCATION = {
+            android.Manifest.permission.ACCESS_FINE_LOCATION,
+            android.Manifest.permission.ACCESS_COARSE_LOCATION,
+            android.Manifest.permission.ACCESS_LOCATION_EXTRA_COMMANDS,
+            android.Manifest.permission.BLUETOOTH_SCAN,
+            android.Manifest.permission.BLUETOOTH_CONNECT,
+            android.Manifest.permission.BLUETOOTH_PRIVILEGED
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-
+        checkPermissions();
 
         list = new ArrayList<>();
 
@@ -52,7 +74,16 @@ public class MainActivity extends AppCompatActivity {
         map.put("token", token1);
         reference.child(android_id).setValue(map);
 
+        binding.audioCall1.setOnClickListener(v -> {
+            startService();
+        });
 
+
+        binding.videoCall.setOnClickListener(v -> {
+
+            stopService();
+
+        });
 
         reference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -66,16 +97,16 @@ public class MainActivity extends AppCompatActivity {
                 }
                 AdapterClass adapterClass = new AdapterClass(MainActivity.this, list, detail -> {
 
-                    Map map1 = new HashMap();
-                    map1.put("status", "1");
-                    Intent intent = new Intent(MainActivity.this, AudioCallActivity.class);
-                    intent.putExtra("otherId", detail.getId());
-                    startActivity(intent);
+//                    Map map1 = new HashMap();
+//                    map1.put("status", "1");
+//                    Intent intent = new Intent(MainActivity.this, AudioCallActivity.class);
+//                    intent.putExtra("otherId", detail.getId());
+//                    startActivity(intent);
 
-                  //  service.startForegroundService();
+                    startService();
 
 
-                    reference.child(detail.getId()).updateChildren(map1);
+                   // reference.child(detail.getId()).updateChildren(map1);
                 });
                 binding.recyclerView.setAdapter(adapterClass);
                 adapterClass.notifyDataSetChanged();
@@ -88,37 +119,41 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        binding.videoCall.setOnClickListener(v -> {
-
-            startActivity(new Intent(MainActivity.this, VideoCallActivity.class));
-
-        });
+//        binding.videoCall.setOnClickListener(v -> {
+//
+//            startActivity(new Intent(MainActivity.this, VideoCallActivity.class));
+//
+//        });
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        reference.child(android_id).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                id = snapshot.child("status").getValue(String.class);
-                if (status.equals(id)) {
-                    startActivity(new Intent(MainActivity.this, AudioCallActivity.class));
-                    finish();
-                }
+    public void startService() {
+        Intent serviceIntent = new Intent(this, ForegroundService.class);
+        serviceIntent.putExtra("inputExtra", "incoming voice call");
+        ContextCompat.startForegroundService(this, serviceIntent);
+    }
+    public void stopService() {
+        Intent serviceIntent = new Intent(this, ForegroundService.class);
+        stopService(serviceIntent);
+    }
 
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
-
-
-}
-
+    private void checkPermissions(){
+        int permission1 = ActivityCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        int permission2 = ActivityCompat.checkSelfPermission(this, android.Manifest.permission.BLUETOOTH_SCAN);
+        if (permission1 != PackageManager.PERMISSION_GRANTED) {
+            // We don't have permission so prompt the user
+            ActivityCompat.requestPermissions(
+                    this,
+                    PERMISSIONS_STORAGE,
+                    1
+            );
+        } else if (permission2 != PackageManager.PERMISSION_GRANTED){
+            ActivityCompat.requestPermissions(
+                    this,
+                    PERMISSIONS_LOCATION,
+                    1
+            );
+        }
+    }
     @Override
     protected void onDestroy() {
         super.onDestroy();

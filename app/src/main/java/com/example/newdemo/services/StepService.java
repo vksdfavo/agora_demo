@@ -236,9 +236,6 @@ public class StepService extends Service implements SensorEventListener {
         updatedTime = elapsedTime;
     }
 
-    private void resetVariables() {
-
-    }
 
     //Calculates the number of steps and the other calculations related to them
     private void countSteps(int step) {
@@ -320,18 +317,6 @@ public class StepService extends Service implements SensorEventListener {
         if (stepCounter != null)
             sensorManager.unregisterListener(StepService.this, stepCounter);
 
-    }
-
-    public HashMap<String, String> getPrevData() {
-
-        HashMap<String, String> data = new HashMap<>();
-        String distanceString = String.format("%.2f", lastDistance);
-
-        data.put("duration", String.format(getString(R.string.time), elapsedString));
-        data.put("steps", String.format(getString(R.string.steps1), lastSteps));
-        data.put("distance", String.format(getString(R.string.distance), distanceString));
-        data.put("speed", String.format(getResources().getString(R.string.speed), (int) (distance / (elapsedTime / (1000 * 60)))));
-        return data;
     }
 
     public HashMap<String, String> getData() {

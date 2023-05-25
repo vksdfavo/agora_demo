@@ -1,41 +1,34 @@
 package com.example.newdemo;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.IBinder;
 import android.os.PowerManager;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
-
 import com.example.newdemo.databinding.ActivityAudioCallBinding;
 import com.example.newdemo.services.StepService;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-
 import java.util.HashMap;
 import java.util.Map;
-
 import io.agora.rtc.Constants;
 import io.agora.rtc.IRtcEngineEventHandler;
 import io.agora.rtc.RtcEngine;
@@ -49,17 +42,21 @@ public class AudioCallActivity extends AppCompatActivity {
     private SensorManager mSensorManager;
     private Sensor mProximity;
     private String appId = "ca56e637cb334e13b636b97a9c901ba1";
-    private String token ="007eJxTYDAvfpb8svTmkQts8zl+ye10mN4dGvOxdN/hFaJNLLKMl5wVGJITTc1SzYzNk5OMjU1SDY2TzIzNkizNEy2TLQ0MkxINeztzUhoCGRnSfxuwMDJAIIjPylCWmZ1YzMAAAIkLH+4=";
+    private String token = "007eJxTYDAvfpb8svTmkQts8zl+ye10mN4dGvOxdN/hFaJNLLKMl5wVGJITTc1SzYzNk5OMjU1SDY2TzIzNkizNEy2TLQ0MkxINeztzUhoCGRnSfxuwMDJAIIjPylCWmZ1YzMAAAIkLH+4=";
     private String channelName = "vikas";
     DatabaseReference reference;
-    private String android_id,status, otherId;
+    private String android_id, status, otherId;
+    private StepService service = null;
+    private boolean isBound ;
+    private Handler handler = new Handler();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityAudioCallBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        android_id =  Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+        android_id = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
 
         reference = FirebaseDatabase.getInstance().getReference("Call");
 
@@ -72,6 +69,30 @@ public class AudioCallActivity extends AppCompatActivity {
         senseProximity();
     }
 
+    private ServiceConnection mServiceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            isBound = false;
+        }
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder binder_service) {
+            StepService.MyBinder myBinder = (StepService.MyBinder) binder_service;
+            service = myBinder.getService();
+            isBound = true;
+        }
+    };
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        Intent intent = new Intent(AudioCallActivity.this, StepService.class);
+        bindService(intent, mServiceConnection, Context.BIND_AUTO_CREATE);
+        handler.postDelayed(() -> {
+
+        }, 0);
+
+    }
 
     private void senseProximity() {
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
@@ -197,14 +218,12 @@ public class AudioCallActivity extends AppCompatActivity {
             mRtcEngine.leaveChannel();
             Map map = new HashMap();
             map.put("status", "0");
-            if (!android_id.equals(otherId))
-            {
+            if (!android_id.equals(otherId)) {
                 reference.child(otherId).updateChildren(map);
 
-            }else {
+            } else {
                 reference.child(android_id).updateChildren(map);
             }
-
 
 
             dialog.cancel();
@@ -261,6 +280,6 @@ public class AudioCallActivity extends AppCompatActivity {
         super.onPause();
 
         mRtcEngine.leaveChannel();
-//        finish();
+        finish();
     }
 }

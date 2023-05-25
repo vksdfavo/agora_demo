@@ -9,5 +9,7 @@
     <string name="record"> %1$d steps</string>
     <string name="steps1">Steps: %1$d</string>
     <string name="_24hrs">24 Hrs.</string>
+    <string name="end_call">End Call</string>
+    <string name="accept">Accept</string>
 
 </resources>
