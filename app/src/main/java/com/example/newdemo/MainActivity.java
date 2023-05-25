@@ -11,6 +11,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.example.newdemo.databinding.ActivityMainBinding;
+import com.example.newdemo.services.StepService;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -27,17 +28,21 @@ public class MainActivity extends AppCompatActivity {
     DatabaseReference reference;
     private String android_id;
     String token1 = "007eJxTYDAvfpb8svTmkQts8zl+ye10mN4dGvOxdN/hFaJNLLKMl5wVGJITTc1SzYzNk5OMjU1SDY2TzIzNkizNEy2TLQ0MkxINeztzUhoCGRnSfxuwMDJAIIjPylCWmZ1YzMAAAIkLH+4=";
-    String id, status = "1" ;
+    String id, status = "1";
     private List<ModalClass> list;
+    private StepService service = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+
+
         list = new ArrayList<>();
 
-        android_id =  Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+        android_id = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
 
         reference = FirebaseDatabase.getInstance().getReference("Call");
 
@@ -47,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
         map.put("token", token1);
         reference.child(android_id).setValue(map);
 
+
+
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -54,21 +61,21 @@ public class MainActivity extends AppCompatActivity {
 
                 for (DataSnapshot dataSnapshot1 : snapshot.getChildren()) {
                     ModalClass user = dataSnapshot1.getValue(ModalClass.class);
-                     list.add(user);
+                    list.add(user);
 
                 }
-                AdapterClass adapterClass = new AdapterClass(MainActivity.this, list, new AdapterClass.OnItemClickCallback() {
-                    @Override
-                    public void onItemClick(ModalClass detail) {
+                AdapterClass adapterClass = new AdapterClass(MainActivity.this, list, detail -> {
 
-                        Map map = new HashMap();
-                        map.put("status", "1");
-                        Intent intent =  new Intent(MainActivity.this, AudioCallActivity.class);
-                        intent.putExtra("otherId", detail.getId());
-                        startActivity(intent);
+                    Map map1 = new HashMap();
+                    map1.put("status", "1");
+                    Intent intent = new Intent(MainActivity.this, AudioCallActivity.class);
+                    intent.putExtra("otherId", detail.getId());
+                    startActivity(intent);
 
-                        reference.child(detail.getId()).updateChildren(map);
-                    }
+                  //  service.startForegroundService();
+
+
+                    reference.child(detail.getId()).updateChildren(map1);
                 });
                 binding.recyclerView.setAdapter(adapterClass);
                 adapterClass.notifyDataSetChanged();
@@ -94,11 +101,10 @@ public class MainActivity extends AppCompatActivity {
         reference.child(android_id).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                 id = snapshot.child("status").getValue(String.class);
-                if (status.equals(id))
-                {
-                 startActivity(new Intent(MainActivity.this, AudioCallActivity.class));
-                 finish();
+                id = snapshot.child("status").getValue(String.class);
+                if (status.equals(id)) {
+                    startActivity(new Intent(MainActivity.this, AudioCallActivity.class));
+                    finish();
                 }
 
             }
@@ -109,5 +115,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
+
+}
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Intent stopIntent = new Intent(this, StepService.class);
+        stopIntent.setAction(ConstantsStep.STOP_FOREGROUND);
+        startService(stopIntent);
     }
 }

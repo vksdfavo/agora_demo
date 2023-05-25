@@ -2,4 +2,12 @@
     <string name="app_name">NewDemo</string>
     <string name="audio_call">Audio Call</string>
     <string name="video_call">Video Call</string>
+    <string name="time">Time: %1$s</string>
+    <string name="speed"> %1$d steps/min</string>
+    <string name="distance">Distance: %1$s m</string>
+    <string name="orientation">Orientation: %1$s</string>
+    <string name="record"> %1$d steps</string>
+    <string name="steps1">Steps: %1$d</string>
+    <string name="_24hrs">24 Hrs.</string>
+
 </resources>
