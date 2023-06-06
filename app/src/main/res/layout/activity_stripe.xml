@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".payment_getways.StripeActivity">
+
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible">
+
+
+        <LinearLayout
+            android:id="@+id/rl_pay_payout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+            <TextView
+                android:id="@+id/price_tv1"
+                style="@style/textNormal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="@dimen/space10"
+                android:layout_marginTop="@dimen/space10"
+                android:padding="@dimen/space10"
+                android:text="Pay Rs. 300"
+                android:visibility="visible" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="gone"
+                android:weightSum="2">
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/vendorImage"
+                        android:layout_width="@dimen/space80"
+                        android:layout_height="@dimen/space80"
+                        android:layout_margin="@dimen/space10"
+                        android:src="@drawable/baseline_call_24">
+
+                    </de.hdodenhof.circleimageview.CircleImageView>
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1.5"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/vendorNameTv"
+                        style="@style/textHeading"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/space10"
+                        android:layout_marginTop="@dimen/text20"
+                        android:text="Jot Bhullar" />
+
+                    <TextView
+                        android:id="@+id/venSpecTv"
+                        style="@style/textNormal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/space10"
+                        android:layout_marginTop="@dimen/space4"
+                        android:text="Strategy Cons.Specialist" />
+
+                    <TextView
+                        android:id="@+id/price_tv"
+                        style="@style/textNormal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:layout_marginHorizontal="@dimen/space10"
+                        android:layout_marginTop="@dimen/space4"
+                        android:padding="@dimen/space10"
+                        android:text="Rs. 300"
+                        android:visibility="visible" />
+
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/space20"
+                android:layout_marginTop="@dimen/space20"
+                android:layout_marginRight="@dimen/space20"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/space5"
+                        android:text="Name" />
+
+                    <EditText
+                        android:id="@+id/firstName"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/et_bg_grey"
+                        android:inputType="textPersonName|textCapWords"
+                        android:paddingLeft="@dimen/space10"
+                        android:paddingTop="@dimen/space10"
+                        android:paddingBottom="@dimen/space10"
+                        android:textSize="@dimen/text14" />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/space10"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/space5"
+                        android:text="Surname" />
+
+                    <EditText
+                        android:id="@+id/lastname"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/et_bg_grey"
+                        android:inputType="textPersonName|textCapWords"
+                        android:paddingLeft="@dimen/space10"
+                        android:paddingTop="@dimen/space10"
+                        android:paddingBottom="@dimen/space10"
+                        android:textSize="@dimen/text14"
+
+                        />
+
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/space20"
+                android:layout_marginTop="@dimen/space20"
+                android:layout_marginRight="@dimen/space20"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/space5"
+                    android:text="Card Number" />
+
+                <EditText
+                    android:id="@+id/card_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/et_bg_grey"
+                    android:hint="0000 0000 0000 0000"
+                    android:inputType="number"
+                    android:maxLength="16"
+                    android:paddingLeft="@dimen/space10"
+                    android:paddingTop="@dimen/space10"
+                    android:paddingBottom="@dimen/space10"
+                    android:textSize="@dimen/text14"
+
+
+                    />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/space20"
+                android:layout_marginTop="@dimen/space20"
+                android:layout_marginRight="@dimen/space20"
+                android:orientation="horizontal"
+                android:weightSum="2">
+
+                <EditText
+                    android:id="@+id/expiryDate"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/et_bg_grey"
+                    android:drawableRight="@drawable/ic_date"
+                    android:drawableTint="@color/appcolor"
+                    android:focusable="false"
+                    android:hint="dd/mm"
+                    android:padding="@dimen/space10"
+                    android:textSize="@dimen/text14" />
+
+                <EditText
+                    android:id="@+id/et_ccv"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/space10"
+                    android:layout_weight="1"
+                    android:background="@drawable/et_bg_grey"
+                    android:drawableRight="@drawable/ic_baseline_help_24"
+                    android:drawableTint="@color/appcolor"
+                    android:hint="CVV"
+                    android:inputType="numberPassword"
+                    android:maxLength="3"
+                    android:padding="@dimen/space10"
+                    android:textSize="@dimen/text14" />
+
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/space20"
+                android:layout_marginTop="@dimen/space20"
+                android:layout_marginRight="@dimen/space20"
+                android:background="@drawable/et_bg_grey"
+                android:padding="@dimen/space10">
+
+                <Spinner
+                    android:id="@+id/countrySpinner"
+                    style="@style/textNormal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeOptions="actionNext" />
+
+
+            </RelativeLayout>
+
+
+            <EditText
+                android:id="@+id/et_country"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/space20"
+                android:layout_marginTop="@dimen/space20"
+                android:layout_marginRight="@dimen/space20"
+                android:layout_weight="1"
+                android:background="@drawable/et_bg_grey"
+                android:hint="Country"
+                android:inputType="text"
+                android:padding="@dimen/space10"
+                android:textSize="@dimen/text14"
+                android:visibility="gone" />
+
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/pay_btn"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginHorizontal="@dimen/space55"
+                android:layout_marginTop="@dimen/space25"
+                android:layout_marginBottom="@dimen/space10"
+                android:background="@drawable/round_btn_bg"
+                android:elevation="20dp"
+                android:text="Pay"
+                android:textColor="@color/white" />
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</LinearLayout>

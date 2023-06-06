@@ -1,6 +1,7 @@
 package com.example.newdemo;
 
 
+
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -14,6 +15,7 @@ import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
@@ -22,6 +24,7 @@ import androidx.core.app.NotificationCompat;
 public class ForegroundService extends Service {
     public static final String CHANNEL_ID = "ForegroundServiceChannel";
     private boolean isActive = false;
+    int notification_id = 1711101;
 
     private SharedPreferences user;
     private Handler handler = new Handler();
@@ -34,12 +37,43 @@ public class ForegroundService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        Intent resetIntent = new Intent(this, ForegroundService.class);
-        resetIntent.setAction(ConstantsStep.RESET_COUNT);
-        PendingIntent resetPendingIntent = PendingIntent.getService(this, 0, resetIntent, PendingIntent.FLAG_IMMUTABLE);
+        if (ConstantsStep.REJECT.equals(intent.getAction())) {
 
-        resetIntent.setAction(ConstantsStep.STOP_SAVE_COUNT);
-        PendingIntent stopPendingIntent = PendingIntent.getService(this, 0, resetIntent, PendingIntent.FLAG_IMMUTABLE);
+            Toast.makeText(this, "reject", Toast.LENGTH_SHORT).show();
+        }
+
+
+        Notification notification = buildNotification(intent);
+        startForeground(notification_id, notification);
+        // Perform your service logic here
+        return START_STICKY;
+
+
+    }
+
+    private void stopForegroundService(boolean b) {
+        Toast.makeText(this, "accept", Toast.LENGTH_SHORT).show();
+
+
+    }
+
+    private void resetCount() {
+
+        Toast.makeText(this, "reject", Toast.LENGTH_SHORT).show();
+
+    }
+
+    private Notification buildNotification(Intent intent) {
+
+        Intent reject = new Intent(this, MainActivity.class);
+        reject.setAction(ConstantsStep.REJECT);
+        reject.putExtra("vikas", "kumar");
+        PendingIntent rejectPendingIntent = PendingIntent.getBroadcast(this, 0, reject, PendingIntent.FLAG_IMMUTABLE);
+
+
+        Intent accept = new Intent(this, MainActivity.class);
+        accept.setAction(ConstantsStep.ACCEPT);
+        PendingIntent acceptPendingIntent = PendingIntent.getBroadcast(this, 0, accept, PendingIntent.FLAG_IMMUTABLE);
 
         String input = intent.getStringExtra("inputExtra");
         createNotificationChannel();
@@ -53,16 +87,16 @@ public class ForegroundService extends Service {
                 .setSmallIcon(R.drawable.baseline_call_24)
                 .setLargeIcon(Bitmap.createScaledBitmap(BitmapFactory.decodeResource(this.getResources(), R.drawable.profile), 97, 128, false))
                 .setContentIntent(pendingIntent)
-                .addAction(R.drawable.reset, "Reject", resetPendingIntent)
-                .addAction(R.drawable.stop, "Accept", stopPendingIntent)
+                .addAction(R.drawable.reset, "Reject", rejectPendingIntent)
+                .addAction(R.drawable.stop, "Accept", acceptPendingIntent)
                 .setOngoing(true)
                 .build();
-        startForeground(1, notification);
+        startForeground(notification_id, notification);
 
         //do heavy work on a background thread
         //stopSelf();
-        return START_NOT_STICKY;
 
+        return notification;
     }
 
 
@@ -84,11 +118,7 @@ public class ForegroundService extends Service {
 
     private void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel serviceChannel = new NotificationChannel(
-                    CHANNEL_ID,
-                    "Foreground Service Channel",
-                    NotificationManager.IMPORTANCE_DEFAULT
-            );
+            NotificationChannel serviceChannel = new NotificationChannel(CHANNEL_ID, "Foreground Service Channel", NotificationManager.IMPORTANCE_DEFAULT);
             NotificationManager manager = getSystemService(NotificationManager.class);
             manager.createNotificationChannel(serviceChannel);
         }

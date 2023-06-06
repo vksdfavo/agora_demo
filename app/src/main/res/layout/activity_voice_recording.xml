@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    tools:context=".payment_getways.VoiceRecordingActivity">
+
+    <Button
+        android:id="@+id/btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/dp_20"
+        android:text="@string/start_recording"
+        android:textSize="20sp"/>
+
+    <Button
+        android:id="@+id/stop_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center"
+        android:layout_below="@id/btn"
+        android:layout_marginTop="@dimen/dp_20"
+        android:text="@string/stop_recording"
+        android:textSize="20sp"/>
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/voiceRecoderLottie"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_centerVertical="true"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        android:visibility="gone"
+        app:lottie_rawRes="@raw/voice_recoder_loti" />
+
+    <Chronometer
+        android:id="@+id/chronometer"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_width="wrap_content"
+        android:visibility="gone"
+        android:layout_below="@id/voiceRecoderLottie"
+        android:layout_height="wrap_content" />
+
+</RelativeLayout>

@@ -6,10 +6,7 @@ import androidx.core.content.ContextCompat;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.content.ComponentName;
 import android.content.Context;
-import android.content.Intent;
-import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -18,13 +15,13 @@ import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.IBinder;
 import android.os.PowerManager;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
+
 import com.example.newdemo.databinding.ActivityAudioCallBinding;
-import com.example.newdemo.services.StepService;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import java.util.HashMap;
@@ -42,14 +39,13 @@ public class AudioCallActivity extends AppCompatActivity {
     private SensorManager mSensorManager;
     private Sensor mProximity;
     private String appId = "ca56e637cb334e13b636b97a9c901ba1";
-    private String token = "007eJxTYDAvfpb8svTmkQts8zl+ye10mN4dGvOxdN/hFaJNLLKMl5wVGJITTc1SzYzNk5OMjU1SDY2TzIzNkizNEy2TLQ0MkxINeztzUhoCGRnSfxuwMDJAIIjPylCWmZ1YzMAAAIkLH+4=";
+    private String token = "007eJxTYAg1n2k/e7ZkYsnJ8K0KS1a7/F/dIbdS4uLvT9+W5jbua7yrwJCcaGqWamZsnpxkbGySamicZGZslmRpnmiZbGlgmJRo+HZGQUpDICND7ckoBkYoBPFZGcoysxOLGRgA/WwiQw==";
     private String channelName = "vikas";
     DatabaseReference reference;
     private String android_id, status, otherId;
-    private StepService service = null;
     private boolean isBound ;
     private Handler handler = new Handler();
-
+    private static String CHANNEL_ID = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,37 +57,13 @@ public class AudioCallActivity extends AppCompatActivity {
         reference = FirebaseDatabase.getInstance().getReference("Call");
 
         otherId = getIntent().getStringExtra("otherId");
+        CHANNEL_ID = getIntent().getStringExtra("token");
+
         if (checkSelfPermission(Manifest.permission.RECORD_AUDIO, 1)) {
             initAgoraEngineAndJoinChannel();
         }
 
-
         senseProximity();
-    }
-
-    private ServiceConnection mServiceConnection = new ServiceConnection() {
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            isBound = false;
-        }
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder binder_service) {
-            StepService.MyBinder myBinder = (StepService.MyBinder) binder_service;
-            service = myBinder.getService();
-            isBound = true;
-        }
-    };
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        Intent intent = new Intent(AudioCallActivity.this, StepService.class);
-        bindService(intent, mServiceConnection, Context.BIND_AUTO_CREATE);
-        handler.postDelayed(() -> {
-
-        }, 0);
-
     }
 
     private void senseProximity() {
@@ -121,11 +93,10 @@ public class AudioCallActivity extends AppCompatActivity {
 
     private void initAgoraEngineAndJoinChannel() {
         initializeAgoraEngine();
-        joinChannel();
+        joinChannel(CHANNEL_ID);
     }
 
     public boolean checkSelfPermission(String permission, int requestCode) {
-
         if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
 
             ActivityCompat.requestPermissions(this, new String[]{permission}, requestCode);
@@ -148,11 +119,8 @@ public class AudioCallActivity extends AppCompatActivity {
         @Override
         public void onJoinChannelSuccess(String channel, int uid, int elapsed) {
             super.onJoinChannelSuccess(channel, uid, elapsed);
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
+            runOnUiThread(() -> {
 
-                }
             });
 
         }
@@ -183,11 +151,14 @@ public class AudioCallActivity extends AppCompatActivity {
         }
     }
 
-    private void joinChannel() {
+    private void joinChannel(String channelId) {
         initializeEngine();
-        String callToken = token;
+        Toast.makeText(this, "callToken  "+channelId, Toast.LENGTH_SHORT).show();
 
-        mRtcEngine.joinChannel(callToken, channelName, "Extra Optional Data", 0);
+       // mRtcEngine.joinChannel(null, channelId, null, 0);
+
+
+       mRtcEngine.joinChannel(token, channelName, "Extra Optional Data", 0);
     }
 
     private void initializeEngine() {
@@ -261,12 +232,9 @@ public class AudioCallActivity extends AppCompatActivity {
         builder1.setIcon(R.drawable.baseline_warning_24);
         builder1.setCancelable(false);
         builder1.setPositiveButton("End Call", (dialog, id) -> {
-
             finish();
             mRtcEngine.leaveChannel();
             dialog.cancel();
-
-
         });
 
         builder1.setNegativeButton("Dismiss", (dialog, id) -> dialog.cancel());

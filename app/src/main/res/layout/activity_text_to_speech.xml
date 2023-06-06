@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".TextToSpeechActivity">
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginHorizontal="@dimen/dp_10"
+        android:layout_marginTop="10dp"
+        android:hint="@string/email"
+        app:endIconMode="clear_text"
+        app:startIconDrawable="@drawable/baseline_keyboard_voice_24"
+        app:startIconTint="@color/appcolor">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/signIn_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/speechBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/dp_50"
+        android:layout_marginVertical="@dimen/dp_20"
+        android:layout_marginBottom="@dimen/space2"
+        android:background="@drawable/round_btn_bg"
+        android:padding="10dp"
+        android:text="@string/speech"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/speakBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/dp_50"
+        android:layout_marginVertical="@dimen/dp_20"
+        android:layout_marginBottom="@dimen/space2"
+        android:background="@drawable/round_btn_bg"
+        android:padding="10dp"
+        android:text="Start Speak"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/stopBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/dp_50"
+        android:layout_marginVertical="@dimen/dp_20"
+        android:layout_marginBottom="@dimen/space2"
+        android:background="@drawable/round_btn_bg"
+        android:padding="10dp"
+        android:text="Stop Speak"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/txt_speak"
+        android:layout_width="wrap_content"
+        android:text="@string/app_name"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center"
+        android:layout_height="wrap_content">
+
+    </TextView>
+
+
+</LinearLayout>
