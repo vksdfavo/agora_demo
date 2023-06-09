@@ -18,9 +18,10 @@ public class TextToSpeechActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        super.onCreate(savedInstanceState) ;
         binding = ActivityTextToSpeechBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
         textToSpeechMethod();
         speechToTextMethod();
 
@@ -37,6 +38,7 @@ public class TextToSpeechActivity extends AppCompatActivity {
             try {
                 startActivityForResult(intent, REQUEST_CODE_SPEECH_INPUT);
             } catch (Exception e) {
+
             }
         });
 
@@ -69,7 +71,6 @@ public class TextToSpeechActivity extends AppCompatActivity {
             textToSpeech.speak(text, TextToSpeech.QUEUE_FLUSH, null, null);
         });
     }
-
 
     @Override
     protected void onDestroy() {

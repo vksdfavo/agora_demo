@@ -1,12 +1,10 @@
 package com.example.newdemo.payment_getways;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 
-import com.example.newdemo.MainActivity;
+import com.example.newdemo.OpenCameraActivity;
 import com.example.newdemo.SplashActivity;
 import com.example.newdemo.TextToSpeechActivity;
 import com.example.newdemo.databinding.ActivityPaymentBinding;
@@ -56,6 +54,13 @@ public class PaymentActivity extends AppCompatActivity {
         binding.txtToSpeechBtn.setOnClickListener(v -> {
 
             Intent intent = new Intent(PaymentActivity.this, TextToSpeechActivity.class);
+            startActivity(intent);
+
+        });
+
+        binding.txtToOpenCamera.setOnClickListener(v -> {
+
+            Intent intent = new Intent(PaymentActivity.this, OpenCameraActivity.class);
             startActivity(intent);
 
         });

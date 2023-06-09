@@ -46,11 +46,17 @@
         tools:replace="android:theme,usesCleartextTraffic"
         tools:targetApi="31">
         <activity
+            android:name=".ShowImageActivity"
+            android:exported="false" />
+        <activity
+            android:name=".OpenCameraActivity"
+            android:exported="false" />
+        <activity
             android:name=".TextToSpeechActivity"
             android:exported="false" />
         <activity
             android:name=".SplashActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".payment_getways.VideoPlayerActivity"
             android:exported="false" />

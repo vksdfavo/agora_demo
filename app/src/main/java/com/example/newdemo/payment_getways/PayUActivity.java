@@ -25,7 +25,6 @@ import java.util.HashMap;
 public class PayUActivity extends AppCompatActivity {
     ActivityPayUactivityBinding binding;
 
-
     private static final String SUCCESS_URL = "https://payu.herokuapp.com/success";
     private static final String FAILURE_URL = "https://payu.herokuapp.com/failure";
 
