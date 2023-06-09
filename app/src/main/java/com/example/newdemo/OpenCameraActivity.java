@@ -28,7 +28,9 @@ import android.hardware.camera2.TotalCaptureResult;
 import android.hardware.camera2.params.StreamConfigurationMap;
 import android.media.Image;
 import android.media.ImageReader;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Size;
 import android.view.MotionEvent;
 import android.view.Surface;
@@ -58,11 +60,14 @@ public class OpenCameraActivity extends AppCompatActivity {
     private CameraCaptureSession cameraCaptureSession;
     private CaptureRequest.Builder captureRequestBuilder;
     private ImageReader imageReader;
-    Bitmap bitmap;
-    private float zoomLevel = 1.0f;
-    private static final int CAMERA_PERMISSION_REQUEST_CODE = 1001;
     private int currentCameraId = Camera.CameraInfo.CAMERA_FACING_FRONT;
     private boolean isCameraRotated = false;
+    private float initialZoomLevel = 1.0f; // Initial zoom level
+    private float maxZoomLevel = 2.0f; // Maximum zoom level
+    private float zoomLevel = initialZoomLevel;
+    static int PICK_IMAGE_PHOTO = 1;
+
+    private Rect zoomRect;
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -84,6 +89,11 @@ public class OpenCameraActivity extends AppCompatActivity {
         cameraManager = (CameraManager) getSystemService(CAMERA_SERVICE);
         binding.textureView.setSurfaceTextureListener(textureListener);
 
+        ViewGroup.LayoutParams layoutParams = binding.textureView.getLayoutParams();
+        layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT;
+        layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT;
+        binding.textureView.setLayoutParams(layoutParams);
+
         binding.flipCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -91,7 +101,16 @@ public class OpenCameraActivity extends AppCompatActivity {
             }
         });
 
+        binding.galleryImage.setOnClickListener(v -> {
+
+            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+            intent.setType("image/*");
+            startActivityForResult(intent, PICK_IMAGE_PHOTO);
+        });
+
     }
+
+
 
 
     private TextureView.SurfaceTextureListener textureListener = new TextureView.SurfaceTextureListener() {
@@ -116,6 +135,7 @@ public class OpenCameraActivity extends AppCompatActivity {
             // Handle surface texture updates, if needed
         }
     };
+
 
     private void setupCamera(int width, int height) {
         try {
@@ -368,8 +388,6 @@ public class OpenCameraActivity extends AppCompatActivity {
         @Override
         public void onCaptureCompleted(@NonNull CameraCaptureSession session, @NonNull CaptureRequest request, @NonNull TotalCaptureResult result) {
             super.onCaptureCompleted(session, request, result);
-            // Focus operation completed, you can handle the result or perform additional actions
-
 
         }
     };
@@ -394,7 +412,6 @@ public class OpenCameraActivity extends AppCompatActivity {
             }
         }
     }
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -405,13 +422,11 @@ public class OpenCameraActivity extends AppCompatActivity {
             binding.textureView.setSurfaceTextureListener(textureListener);
         }
     }
-
     @Override
     protected void onPause() {
         closeCamera();
         super.onPause();
     }
-
     private void closeCamera() {
         if (cameraCaptureSession != null) {
             cameraCaptureSession.close();
@@ -424,6 +439,27 @@ public class OpenCameraActivity extends AppCompatActivity {
         if (imageReader != null) {
             imageReader.close();
             imageReader = null;
+        }
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE_PHOTO && resultCode == -1) {
+            Uri imageUriPhotos = data.getData();
+
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUriPhotos);
+                Bitmap rotatedBitmap = rotateBitmap(bitmap, 1);
+                String filePath = saveBitmapToFile(rotatedBitmap);
+                Intent intent = new Intent(OpenCameraActivity.this, ShowImageActivity.class);
+                intent.putExtra("imageFilePath", filePath);
+                startActivity(intent);
+
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+
         }
     }
 }
