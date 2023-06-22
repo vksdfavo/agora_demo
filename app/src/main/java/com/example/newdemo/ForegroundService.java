@@ -70,7 +70,6 @@ public class ForegroundService extends Service {
         reject.putExtra("vikas", "kumar");
         PendingIntent rejectPendingIntent = PendingIntent.getBroadcast(this, 0, reject, PendingIntent.FLAG_IMMUTABLE);
 
-
         Intent accept = new Intent(this, MainActivity.class);
         accept.setAction(ConstantsStep.ACCEPT);
         PendingIntent acceptPendingIntent = PendingIntent.getBroadcast(this, 0, accept, PendingIntent.FLAG_IMMUTABLE);
@@ -79,13 +78,12 @@ public class ForegroundService extends Service {
         createNotificationChannel();
 
         Intent notificationIntent = new Intent(this, MainActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this,
-                0, notificationIntent, PendingIntent.FLAG_IMMUTABLE);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_IMMUTABLE);
         Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setContentTitle("Vikas Kumar")
                 .setContentText(input)
                 .setSmallIcon(R.drawable.baseline_call_24)
-                .setLargeIcon(Bitmap.createScaledBitmap(BitmapFactory.decodeResource(this.getResources(), R.drawable.profile), 97, 128, false))
+                 .setLargeIcon(Bitmap.createScaledBitmap(BitmapFactory.decodeResource(this.getResources(), R.drawable.profile), 97, 128, false))
                 .setContentIntent(pendingIntent)
                 .addAction(R.drawable.reset, "Reject", rejectPendingIntent)
                 .addAction(R.drawable.stop, "Accept", acceptPendingIntent)

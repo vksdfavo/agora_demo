@@ -65,9 +65,9 @@ dependencies {
     implementation "androidx.core:core-splashscreen:1.0.1"
     implementation 'com.google.android.gms:play-services-auth:16.0.1'
     implementation 'com.google.firebase:firebase-auth'
-
-
-
-
-
+    implementation 'ai.api:sdk:2.0.7@aar'
+    implementation 'ai.api:libai:1.6.12'
+    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation 'com.android.volley:volley:1.2.0'
+    implementation 'com.faltenreich:skeletonlayout:4.0.0'
 }

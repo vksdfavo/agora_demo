@@ -93,4 +93,16 @@
         android:elevation="20dp"
         android:text="Open Camera"
         android:textColor="@color/white" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/ai_chat"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginHorizontal="@dimen/space55"
+        android:layout_marginTop="@dimen/space25"
+        android:layout_marginBottom="@dimen/space10"
+        android:background="@drawable/round_btn_bg"
+        android:elevation="20dp"
+        android:text="Ai Chat"
+        android:textColor="@color/white" />
 </LinearLayout>

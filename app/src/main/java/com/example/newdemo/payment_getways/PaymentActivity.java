@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.newdemo.OpenCameraActivity;
+import com.example.newdemo.SimmerActivity;
 import com.example.newdemo.SplashActivity;
 import com.example.newdemo.TextToSpeechActivity;
 import com.example.newdemo.databinding.ActivityPaymentBinding;
@@ -61,6 +62,13 @@ public class PaymentActivity extends AppCompatActivity {
         binding.txtToOpenCamera.setOnClickListener(v -> {
 
             Intent intent = new Intent(PaymentActivity.this, OpenCameraActivity.class);
+            startActivity(intent);
+
+        });
+
+        binding.aiChat.setOnClickListener(v -> {
+
+            Intent intent = new Intent(PaymentActivity.this, SimmerActivity.class);
             startActivity(intent);
 
         });

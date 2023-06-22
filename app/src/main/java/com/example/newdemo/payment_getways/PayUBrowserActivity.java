@@ -24,10 +24,7 @@ public class PayUBrowserActivity extends AppCompatActivity {
     ActivityPayUbrowserBinding binding;
     public static final String clientKey = "AUHj_QFOpwYcrH-LIqOwid3NE8sD4IMMX3x4q3FbotpBPb2yem-NSH28EEKFHXmuV-GH5GT2ZebdUyXb";
     public static final int PAYPAL_REQUEST_CODE = 123;
-
-    private static PayPalConfiguration config = new PayPalConfiguration()
-            .environment(PayPalConfiguration.ENVIRONMENT_SANDBOX)
-            .clientId(clientKey);
+    private static PayPalConfiguration config = new PayPalConfiguration().environment(PayPalConfiguration.ENVIRONMENT_SANDBOX).clientId(clientKey);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,13 +32,7 @@ public class PayUBrowserActivity extends AppCompatActivity {
         binding = ActivityPayUbrowserBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-
-        binding.payBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getPayment();
-            }
-        });
+        binding.payBtn.setOnClickListener(v -> getPayment());
 
     }
 

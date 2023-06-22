@@ -141,8 +141,7 @@ public class AudioCallActivity extends AppCompatActivity {
         }
     };
 
-    private void initializeAgoraEngine() {
-        try {
+    private void initializeAgoraEngine() {try {
 
             RtcEngine mRtcEngine = RtcEngine.create(getBaseContext(), appId, mRtcEventHandler);
             mRtcEngine.setChannelProfile(Constants.CHANNEL_PROFILE_COMMUNICATION);

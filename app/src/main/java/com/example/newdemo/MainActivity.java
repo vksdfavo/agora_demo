@@ -185,7 +185,6 @@ public class MainActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 id = snapshot.child("status").getValue(String.class);
                 channel = snapshot.child("channel").getValue(String.class);
-
                 if (status.equals(id)) {
                     Intent intent = new Intent(MainActivity.this, AudioCallActivity.class);
                     intent.putExtra("otherId", other_token);
